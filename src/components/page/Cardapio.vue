@@ -1,11 +1,12 @@
 <template>
   <div class="hello">
-     Cardapio do Amil-Ca
-
-     <div class="card">
-      <div class="card-body">
-        T
-      </div>
+    <h2>Cardapio do Amil-Ca </h2>
+    <div v-for="i in item" :key="i.id">
+      <div class="card mt-3">
+        <div class="card-body">
+          {{i.name}} {{i.value}}<br>
+        </div>
+      </div> 
     </div>
   </div>
 </template>
@@ -15,6 +16,27 @@ export default {
   name: 'HelloWorld',
   props: {
     msg: String
+  },
+
+  data() {
+      return {
+        mesa: "",
+        item: [
+          {name: 'Cerveja', value: 10.0},
+          {name: 'Agua', value: 5.0},
+          {name: 'Batata frita', value: 10.0},
+          {name: 'Espetinho', value: 10.0},
+          {name: 'Polenta Frita', value: 15.0},
+          {name: 'Pastel', value: 8.0},
+        ],
+      }
+  },
+  mounted() {
+      
+  },
+  methods: {
+    
+    
   }
 }
 </script>
