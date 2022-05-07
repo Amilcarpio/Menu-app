@@ -27,6 +27,12 @@ export default {
   },
   methods: {
     openCardapio(){
+      if(this.mesa == ""){
+        alert('digite o número da mesa')
+      }else {
+        window.location.href = "/cardapio"
+      }
+
       console.log(this.mesa)
     }
   }
