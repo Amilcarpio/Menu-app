@@ -5,12 +5,13 @@
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
+import Cardapio from './components/page/Cardapio'
+
 
 export default {
   name: 'App',
   components: {
-    HelloWorld
+    Cardapio
   },
 
   data() {
