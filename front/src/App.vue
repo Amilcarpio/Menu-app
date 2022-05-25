@@ -21,6 +21,7 @@ export default {
     Checkout,
     Login,
     MenuCategoria,
+    
   },
 
   data() {
