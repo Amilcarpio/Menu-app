@@ -1,18 +1,26 @@
 <template>
   <div id="app">
       <router-view>
-        <Home />
+        
       </router-view>
 </div>
 </template>
 
 <script>
 import Home from './components/page/Home.vue'
+import Cardapio from "./components/page/Cardapio.vue"
+import Checkout from "./components/page/Checkout.vue"
+import Login from "./components/page/Login.vue"
+import MenuCategoria from "./components/page/MenuCategoria.vue"
 
 export default {
   name: 'App',
   components: {
-    Home
+    Home,
+    Cardapio,
+    Checkout,
+    Login,
+    MenuCategoria,
   },
 
   data() {
