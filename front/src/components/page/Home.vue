@@ -39,6 +39,7 @@ export default {
   data() {
       return {
         mesa: "",
+        user: "",
       }
   },
   mounted() {
@@ -59,7 +60,7 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
 body{
   background-color: #FCE83A;
 }

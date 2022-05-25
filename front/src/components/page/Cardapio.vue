@@ -1,19 +1,25 @@
 <template>
   <div class="hello">
     <h2>Cardapio do Amil-Ca </h2>
-    <div v-for="i in item" :key="i.id">
-      <div class="card mt-3">
-        <div class="card-body">
-          {{i.name}} {{i.value}}<br>
-        </div>
-      </div> 
+    <MenuCategoria />
+    <div v-for="i in itens" :key="i.id">
+    <Produto :produto="i"  />
     </div>
   </div>
 </template>
 
 <script>
+import Checkout from "./Checkout.vue"
+import MenuCategoria from "./MenuCategoria.vue"
+import Produto from "./Produto.vue"
+const axios = require('axios').default;
 export default {
-  name: 'HelloWorld',
+  name: 'Cardapio',
+  components: {
+    Checkout,
+    MenuCategoria,
+    Produto
+  },
   props: {
     msg: String
   },
@@ -21,21 +27,26 @@ export default {
   data() {
       return {
         mesa: "",
-        item: [
-          {name: 'Cerveja', value: 10.0},
-          {name: 'Agua', value: 5.0},
-          {name: 'Batata frita', value: 10.0},
-          {name: 'Espetinho', value: 10.0},
-          {name: 'Polenta Frita', value: 15.0},
-          {name: 'Pastel', value: 8.0},
-        ],
+        itens: [],
       }
   },
   mounted() {
-      
+      this.buscarProdutos()
   },
   methods: {
-    
+    buscarProdutos(){
+            let local = this
+            axios.get('https://amilcafood.codelsoftware.com.br/api/produto')
+            .then(function (response) {
+                // handle success
+                local.itens = response.data
+                console.log(response.data);
+            })
+            .catch(function (error) {
+                // handle error
+                console.log(error);
+            });
+        }
     
   }
 }
