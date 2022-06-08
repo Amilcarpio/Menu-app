@@ -1,7 +1,7 @@
 <template>
     <nav class="navbar navbar-light bg-light">
-    <a class="navbar-brand" v-for="categoria in categorias">
-    {{ categoria.name }}</a>
+    <button @click="$emit('adicionar')" class="navbar-brand" v-for="categoria in categorias" :key="categoria.id">
+    {{ categoria.name }}</button>
     </nav>
 </template>
 
@@ -9,6 +9,7 @@
 const axios = require('axios').default;
 export default {
     name: 'MenuCategoria',
+    emits: ['adicionar'],
     data(){
         return {
             categorias:[]

@@ -1,9 +1,9 @@
 <template>
   <div class="hello">
     <h2>Cardapio do Amil-Ca </h2>
-    <MenuCategoria />
+    <MenuCategoria @adicionar="addCat"/>
     <div v-for="i in itens" :key="i.id">
-    <Produto :produto="i"  />
+    <Produto @item="addItem(i)" :produto="i"  />
     </div>
   </div>
 </template>
@@ -26,8 +26,9 @@ export default {
 
   data() {
       return {
-        mesa: "",
-        itens: [],
+        itens: [{
+        name:'',
+        }] 
       }
   },
   mounted() {
@@ -35,20 +36,35 @@ export default {
   },
   methods: {
     buscarProdutos(){
-            let local = this
-            axios.get('https://amilcafood.codelsoftware.com.br/api/produto')
-            .then(function (response) {
-                // handle success
-                local.itens = response.data
-                console.log(response.data);
-            })
-            .catch(function (error) {
-                // handle error
-                console.log(error);
-            });
-        }
+      let local = this
+      axios.get('https://amilcafood.codelsoftware.com.br/api/produto')
+      .then(function (response) {
+      // handle success
+        local.itens = response.data
+        console.log(response.data);
+      })
+      .catch(function (error) {
+      // handle error
+      console.log(error);
+      });
+    },
+
+      addCat(){
+      console.log('teste')
+    },
     
-  }
+     addItem(i){
+      
+      const newOrder = {
+        name:i.name,
+        valor:i.valor,
+      }
+        console.log(newOrder)
+
+    },
+  
+  },
+
 }
 </script>
 

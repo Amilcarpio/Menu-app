@@ -1,8 +1,9 @@
 <template>
     <div class="card mt-3">
         <div class="card-body">
-          {{produto.name}} {{formatValue(produto.valor)}}<br>
+          {{produto.name}} {{formatValue(produto.valor)}}
         </div>
+        <button @click="$emit('item')" type="button" class="btn mt-2" > Adicionar</button>
       </div> 
 </template>
 
@@ -10,6 +11,7 @@
 export default {
     name: 'Produto',
     props: ['produto'],
+    emits: ['item'],
     data(){
         return {
             
