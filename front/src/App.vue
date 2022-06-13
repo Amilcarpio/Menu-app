@@ -1,17 +1,24 @@
 <template>
   <div id="app">
-      <router-view></router-view>
-</div>
+    <router-view>
+     
+    </router-view>
+  </div>
 </template>
 
 <script>
+import Home from './components/page/Home.vue'
 import Cardapio from './components/page/Cardapio'
-
+import MenuCategoria from './components/page/MenuCategoria.vue'
+import Pedido from './components/page/Pedido.vue'
 
 export default {
   name: 'App',
   components: {
-    Cardapio
+    Home,
+    Cardapio,
+    MenuCategoria,
+    Pedido
   },
 
   data() {
@@ -30,11 +37,12 @@ export default {
 
 <style>
 #app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
+  font-family: 'KoHo', sans-serif;
   -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
+  -moz-osx-font-smoothing: grayscale; 
+  text-align: center; 
+  margin-top: 20%;
+  margin-left: 1rem;
+  margin-right: 1rem;
 }
 </style>

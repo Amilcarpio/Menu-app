@@ -1,195 +1,202 @@
 <template>
   <div class="text-start">
     <nav class="navbar navbar-expand-lg fixed-top">
-      <div>
-        <a class="navbar-brand" href="#"> MEU <span class="menu-title">MENU</span></a>
+      <div class="logo">
+        <a class="navbar-brand" href="#"> 
+          <img src="./../../assets/logo.png" alt="logo" width="70" height="70">  
+        </a>
+        <p class="logoName">
+          AMILFOOD
+        </p>
       </div>
     </nav>
-  <div class="container">
-    <main >
-      <div class="lugar mt-3 py-2" v-for="i in restaurante" :key="i.id">
+  <div>
+      <!-- <div class="lugar mt-3 py-2" v-for="i in restaurante" :key="i.id">
       Estabelecimento: {{i.a}}
-      </div>
-      <table  class="table table-striped mt-3">
-        <thead class="thead" v-for="i in option" :key="i.id">
+      </div> -->
+
+      <!-- <table class="table table-striped mt-3" v-on:input='choice = $event.target'>
+
+        <thead class="menu" @click="menu()" v-for="i in produto" :key="i.id">
           <th class="choice">{{i.e}}</th>
           <th class="choice">{{i.p}}</th>
           <th class="choice">{{i.r}}</th>
           <th class="choice">{{i.s}}</th>
           <th class="choice">{{i.b}}</th>
         </thead>
-        <!-- <tbody>
-          <div v-for="i in item" :key="i.id">
-            {{i.name}} - R${{i.value}}<br>
-          </div>
-        </tbody> -->
-      </table>
+       
+      </table> -->
+      <main>
+      <MenuCategoria/>
       <section>
-        <div class="card mt-2 mb-2" v-for="i in item" :key="i.id">
-            <div class="card-body d-flex justify-content-between">
-              <p class="item-card d-flex"> {{i.name}} - R${{i.value}}</p>
-              <button class="cal" @click="down(i)"> - </button>  
-              <p class="cal"> {{i.counter}} </p>
-              <button class="cal" @click="up(i)"> + </button>
-              <button class="add btn" @click="add(i)"> Adicionar </button>  
-          </div> 
-        </div>
+        <div class="row p-1" v-for="i in itens" :key="i.id">
+          <div class="corpo">
+            <Produto :produto="i" />
+            <button class="cal" @click="down(i)"> - </button>
+            <p class="cal"> {{(i.counter > 0 ? i.counter : 0)}} </p>
+            <button class="cal" @click="up(i)"> + </button>
+            <button class="col add btn" @click="addCar"> Adicionar </button>
+          </div>
+        </div> 
       </section>
-        
     </main>
     </div>
-    
-      <div class="rodape d-flex align-item-center justify-content-between">
-        <nav class="navbar fixed-bottom p-3">
-            <i class="bi bi-house">  Cardápio </i>
-            <i class="bi bi-receipt">  Conta </i>
-            <i class="bi bi-clock">  Chamar Garçom</i>
-            <i class="bi bi-person">  Perfil</i>
+
+      <div class="d-flex align-item-center justify-content-between" v-for="i in menuBarra" :key="i.id">
+        <nav class="rodape navbar fixed-bottom p-3" @click="barra(i)">
+            <i class="bi bi-house"> {{ i.ca }} </i>
+            <i class="bi bi-receipt">  {{ i.co }} </i>
+            <i class="bi bi-clock">  {{ i.chG }} </i>
+            <i class="bi bi-person">  {{ i.p }}</i>
         </nav>
-      
-    </div>
+      </div>
   </div>
 
 </template>
 
 <script>
+import MenuCategoria from './MenuCategoria.vue'
+import Produto from './Produto.vue'
+import Pedido from './Pedido.vue'
+
+const axios = require('axios').default;
+
 export default {
   name: 'Cardapio',
-  props: {
-    msg: String
+  components: {
+    MenuCategoria,
+    Produto,
+    Pedido,
   },
+  props: ["categoria", "produto", "pedido"],
 
   data() {
-      return {
-        mesa: "",
-        restaurante: [{
-          a: 'opcao 1',
-          b: 'opcao 2',
-          c: 'opcao 3',
-        }],
-        option: [{
-          e: 'Entradas', p: 'Porções', r: 'Refeições', s: 'Sobremessa', b: 'Bebidas'}],
-        item: [
-          {name: 'Cerveja', value: '10.00', counter: 0},
-          {name: 'Agua', value: '5.00', counter: 0},
-          {name: 'Batata frita', value: '10.00', counter: 0},
-          {name: 'Espetinho', value: '10.00', counter: 0},
-          {name: 'Polenta Frita', value: '15.00', counter: 0},
-          {name: 'Pastel', value: '8.00', counter: 0},
-        ],
-        addCar:[]
-      }
+    return {
+      mesa: "",
+        restaurante: [],
+        itens: [],
+        cart: [],
+        menuBarra: {
+          ca: 'Cardápio', 
+          co: 'Conta', 
+          chG: 'Chamar Garçom', 
+          p: 'Perfil'
+          }
+    }
   },
   mounted() {
+    this.buscarProdutos()
   },
   methods: {
+    buscarProdutos(){
+      let local = this
+      axios.get('https://amilcafood.codelsoftware.com.br/api/produto')
+      .then(function (response) {
+        // handle success
+        local.itens = response.data
+        console.log(response.data);
+      })
+      .catch(function (error) {
+        // handle error
+        console.log(error);
+      });
+    },
+
     up(i){
-      i.counter += 1
+      //verificar se existe o item dentro do cart
+      // se existir, verificar qnts e + 1
+      // se nao existir, criar um novo com a quantidade 1
+      let item = this.cart.find(function(item){
+        return item.id == i.id
+        })
+        if(item == undefined){
+          let novoItem = i
+          novoItem.counter = 1
+          this.cart.push(novoItem)
+        } else {
+          item.counter = item.counter+1
+        }
     },
     down(i){
       if(i.counter > 0){
         i.counter -= 1
       }
     },
-    add(i) {
-    if(i.counter >= 1) {
-      addCar = i.counter
-      }
-    }
+    addCar() {
+      window.location.href = "/pedido"
+    },
   }
 }
 </script>
 
-<!-- Add "scoped" attribute to limit CSS to this component only -->
-<style scoped>
+<style>
 * {
   box-sizing: border-box;
   margin: 0;
   padding: 0;
   font-family: 'KoHo', sans-serif;
 }
-body::before{
-  display: block;
-  content: '';
-  height: 60px;
-}
 
 .navbar {
-  height: 10%;
-  background: #FCE83A;;
-  padding: 1rem;
-  position: fixed;
-} 
-
-.navbar-brand {
-  color: #B1B1B1;
-  font-weight: 500;
+  height: 20%;
+  background: #FCE83A;
 }
 
-.menu-title {
-  color: white;
-  font-weight: 600;
+img {
+  clip-path: circle();
+  margin-left: 2rem;
 }
 
-.lugar {
-  font-weight: 500;
-  color: #B1B1B1;
+.logo {
+  display: flex;
 }
 
-.thead {
-  margin-right: 1rem;
-}
-
-.choice {
-  font-weight: 500;
-  color: black;
-}
-
-.choice:hover {
-  color: #FCE83A;
-  cursor: pointer;
-  
+.logoName{
+  text-align: center;
+  margin-top: 15%;
+  font-family: 'Fredoka One', cursive;
+  color: #986616;
 }
 
 .cal {
-  padding: 0.5rem;
   background: transparent;
   border: none;
   font-weight: 400;
 }
 
-.add {
+.add.btn {
   background: #FCE83A;
-  color: #B1B1B1;
+  color: black;
+  font-weight: 200;
   border-radius: 0.5rem;
-  border: 2px solid #B1B1B1;
-  width: 20%;
-} 
-
-.item-card{
-  padding: 0.5rem;
-  font-weight: 300;
-  color: #B1B1B1;
-  margin-right: 1rem;
+  border: 1px solid rgb(218, 218, 72);
+  
 }
 
-.card-body {
-  padding: 0.5rem;
-  font-weight: 300;
-  color: #B1B1B1;
-} 
+.add:hover {
+  font-weight: 400;
+  cursor: pointer;
+}
+
+.corpo {
+  border: 0.5px solid #B1B1B1;
+  border-radius: 0.5rem;
+  display: flex;
+  text-align: center;
+  padding: 0.2rem;
+}
+
+.corpo, .cal {
+  font-weight: 200;
+  color: rgb(62, 61, 61);
+  margin-right: 1rem;
+}
 
 .rodape {
   background: #FCE83A;
   color: #B1B1B1;
   font-weight: 300;
   height: 10%;
-}
-
-.rodape::before {
-  display: block;
-  height: 57px;
-  content: '';
 }
 
 .bi:hover {

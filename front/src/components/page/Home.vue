@@ -1,6 +1,6 @@
 <template>
   <div class="hello">
-     <h1> Home do Amilca</h1>
+    <h1> Home do Amilca</h1>
 
       <label>Mesa</label>
       <input class="" v-model="mesa">
